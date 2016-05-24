@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Заправки МТУСИ</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+<nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Справочная цен на топливо</a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="#">МТУСИ</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+        <br>
+        <br>
+        <label style="font-size: medium">В данной таблице представленные действующие цены на нефепродукты</label>
+        <br>
+        <br>
+        <table>
+            <thead>
+            <tr>
+                <th data-field="id">Название</th>
+                <th data-field="name">Марка</th>
+                <th data-field="price">Цена</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>Бензин</td>
+                <td>АИ-92</td>
+                <td> <input id="ai_92" style="width: 60px;" class="validate"></td>
+            </tr>
+            <tr>
+                <td>Бензин</td>
+                <td>АИ-95</td>
+                <td><input id="ai_95" style="width: 60px;" class="validate"></td>
+            </tr>
+            <tr>
+                <td>Бензин</td>
+                <td>АИ-98</td>
+                <td><input id="ai_98" style="width: 60px;" class="validate"></td>
+            </tr>
+            <tr>
+                <td>Дизель</td>
+                <td>Дизель</td>
+                <td><input id="disel" style="width: 60px;" class="validate"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br><br>
+        <span style="display: inline; margin-left: 20%">
+            <a id="enter-button"
+               class="btn-large waves-effect waves-light orange center">
+                Сохранить цены
+            </a>
+            <a class="btn-large waves-effect waves-light orange center" href="index.html">
+                Вернуться на главную
+            </a>
+        </span>
+        <br><br>
+    </div>
+</div>
+
+<footer class="page-footer orange" style="margin-bottom: 0px;">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">Цель проекта</h5>
+                <p class="grey-text text-lighten-4">Сайт создан в качестве задания по дисциплине Архитектура информационных систем.</p>
+
+
+            </div>
+            <div class="col l3 s12">
+                <h5 class="white-text">Подготовил</h5>
+                <ul>
+                    <li><a class="white-text" href="#!">Бортников Павел Анатольевич</a></li>
+                    <li><a class="white-text" href="#!">bpress86@gmail.com</a></li>
+                    <li><a class="white-text" href="#!">+7 968 441 15 75</a></li>
+                    <li><a class="white-text" href="#!">+7 903 289 21 58</a></li>
+                </ul>
+            </div>
+            <div class="col l3 s12">
+                <h5 class="white-text">Преподаватель</h5>
+                <ul>
+                    <li><a class="white-text" href="#!">Воронцов Юрий Алексеевич</a></li>
+                    <!--<li><a class="white-text" href="#!">Link 2</a></li>
+                    <li><a class="white-text" href="#!">Link 3</a></li>
+                    <li><a class="white-text" href="#!">Link 4</a></li>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            Все права защищены :)))
+        </div>
+    </div>
+</footer>
+
+
+<!--  Scripts-->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="js/materialize.js"></script>
+<script src="js/init.js"></script>
+<script>
+
+    $(document).ready( function(){
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: '/getData',
+            data: {
+            },
+            success: function (response) {
+                $('#ai_92').attr('placeholder', response.data['ai_92']);
+                $('#ai_92').attr('value', response.data['ai_92']);
+                $('#ai_95').attr('placeholder', response.data['ai_95']);
+                $('#ai_95').attr('value', response.data['ai_95']);
+                $('#ai_98').attr('placeholder', response.data['ai_98']);
+                $('#ai_98').attr('value', response.data['ai_98']);
+                $('#disel').attr('placeholder', response.data['disel']);
+                $('#disel').attr('value', response.data['disel']);
+            }
+        });
+    });
+
+
+    $('#enter-button').click(function () {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: '/savePrice',
+                data: {
+                    'ai_92': $("#ai_92").val(),
+                    'ai_95': $("#ai_95").val(),
+                    'ai_98': $("#ai_98").val(),
+                    'disel': $("#disel").val()
+                },
+                success: function (response) {
+                    var $toastContent = response.data;
+                    Materialize.toast($toastContent, 5000);
+                }
+            });
+    });
+</script>
+</body>
+</html>
